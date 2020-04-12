@@ -1,0 +1,2 @@
+rootProject.name='Gestion des tâches - cigma'
+include ':app'
