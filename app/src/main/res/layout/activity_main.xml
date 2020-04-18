@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:text="Hello World"
+        android:text="@string/app_name"
         android:textAlignment="center"
         android:fontFamily="monospace"
         android:textFontWeight="900"
