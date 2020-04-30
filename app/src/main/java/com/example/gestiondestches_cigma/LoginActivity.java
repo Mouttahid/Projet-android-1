@@ -2,6 +2,8 @@ package com.example.gestiondestches_cigma;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText email;
     EditText password;
     Button loginBtn;
+    Intent mainIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
         loginBtn = (Button) findViewById(R.id.login_button);
+        mainIntent = new Intent(this,MainActivity.class);
         loginBtn.setOnClickListener(
                 new View.OnClickListener() {
             @Override
@@ -60,6 +64,16 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 try {
                     JSONObject jso = new JSONObject(response);
+                    JSONObject user = jso.getJSONObject("user");
+                    if("true".equalsIgnoreCase(jso.getString("success"))){
+                        SharedPreferences preferences = getSharedPreferences("authPrefs",MODE_PRIVATE);
+                        preferences.edit().putString("name",user.getString("name"));
+                        preferences.edit().putString("email",user.getString("email"));
+                        preferences.edit().putString("role",jso.getString("role"));
+                        preferences.edit().putString("auth_token",jso.getString("token_type")+" "+jso.getString("access_token"));
+                        startActivity(mainIntent);
+                    }
+                    Log.d("Success",jso.getString("success"));
                     Log.d(MainActivity.class.getSimpleName(),"response"+response);
 
                 } catch (JSONException e) {
